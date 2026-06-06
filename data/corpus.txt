@@ -1,0 +1,17 @@
+Python is a programming language.
+
+Machine learning is a branch of AI.
+
+Dogs are loyal pets.
+
+Tesla manufactures electric vehicles.
+
+Basketball is a popular sport.
+
+PostgreSQL is a relational database.
+
+Claude is an AI assistant developed by Anthropic.
+
+Chroma is a vector database.
+
+FAISS is a vector similarity search library.
