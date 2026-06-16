@@ -1,19 +1,19 @@
-# import requests
+import requests
 
-# def get_weather(latitude, longitude):
+def get_weather(latitude, longitude):
 
-#     url = (
-#         "https://api.open-meteo.com/v1/forecast"
-#         f"?latitude={latitude}"
-#         f"&longitude={longitude}"
-#         "&current=temperature_2m"
-#     )
+    url = (
+        "https://api.open-meteo.com/v1/forecast"
+        f"?latitude={latitude}"
+        f"&longitude={longitude}"
+        "&current=temperature_2m"
+    )
 
-#     response = requests.get(url)
+    response = requests.get(url)
 
-#     data = response.json()
+    data = response.json()
 
-#     return data["current"]["temperature_2m"]
+    return data["current"]["temperature_2m"]
 # print(
 #     get_weather(
 #         51.5074,
@@ -73,6 +73,5 @@ result = get_weather(
     tool_use.input["longitude"]
 )
 
-print("
-Temperature:")
+print("\nTemperature:")
 print(result)
