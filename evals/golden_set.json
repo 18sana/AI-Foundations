@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is RAG?",
+    "expected": "Retrieval Augmented Generation"
+  },
+  {
+    "question": "What is Chroma?",
+    "expected": "vector database"
+  },
+  {
+    "question": "What is FAISS?",
+    "expected": "similarity search library"
+  },
+  {
+    "question": "What is MCP?",
+    "expected": "Model Context Protocol"
+  },
+  {
+    "question": "What is Tool Calling?",
+    "expected": "allows models to use external tools"
+  }
+]
