@@ -2,3 +2,15 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Pytest cache
+.pytest_cache/
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Vector databases
+chroma_db/
