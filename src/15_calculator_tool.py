@@ -30,27 +30,28 @@ tools = [
     }
 ]
 
-question = input("Ask a math question: ")
+if __name__ == "__main__":
+    question = input("Ask a math question: ")
 
-# First call
-response = client.messages.create(
-    model="claude-haiku-4-5",
-    max_tokens=200,
-    tools=tools,
-    messages=[
-        {
-            "role": "user",
-            "content": question
-        }
-    ]
-)
+    # First call
+    response = client.messages.create(
+        model="claude-haiku-4-5",
+        max_tokens=200,
+        tools=tools,
+        messages=[
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
+    )
 
-# Execute tool
-tool_use = response.content[0]
+    # Execute tool
+    tool_use = response.content[0]
 
-result = calculator(
-    tool_use.input["expression"]
-)
+    result = calculator(
+        tool_use.input["expression"]
+    )
 
-print("\nTool Result:")
-print(result)
+    print("\nTool Result:")
+    print(result)

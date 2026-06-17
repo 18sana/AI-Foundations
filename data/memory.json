@@ -22,5 +22,41 @@
   {
     "query": "What was the result of the math problem we just solved?",
     "answer": "Based on our past conversation, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**"
+  },
+  {
+    "query": "Tell me about MCP.",
+    "answer": "# Model Context Protocol (MCP)\n\nBased on the knowledge context available, **MCP (Model Context Protocol)** is a protocol designed to facilitate communication between language models and external systems or tools.\n\n## Core Purpose\nMCP enables language models (LLMs) to interact with and utilize external resources, tools, and data sources in a standardized way. It provides a framework for integrating various capabilities beyond what a model can do on its own.\n\n## Related Capabilities\nMCP works in conjunction with **Tool Calling**, which allows LLMs to:\n- Invoke external functions and services\n- Access specialized tools and APIs\n- Retrieve and process data from various sources\n- Perform actions that require external computation or knowledge\n\n## Integration with Knowledge Systems\nMCP can work alongside systems like **Chroma** (a vector database), enabling:\n- Semantic search over stored information\n- Retrieval of contextual knowledge\n- Integration of embeddings-based search with LLM reasoning\n\n## Practical Application\nIn practice, MCP creates a bridge between:\n- **LLMs** - which excel at reasoning and language understanding\n- **External Tools** - like calculators, APIs, databases, weather services, etc.\n- **Data Sources** - including vector databases, knowledge bases, and real-time information\n\nThis allows for more powerful and versatile AI systems that can access real-time data,"
+  },
+  {
+    "query": "What is 15.5 * 4?",
+    "answer": "15.5 * 4 = **62.0**"
+  },
+  {
+    "query": "What was the result of the math problem we just solved?",
+    "answer": "Based on our past conversation, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**\n\nThis calculation was performed multiple times in our conversation history, and the answer is consistently **62.0**."
+  },
+  {
+    "query": "Tell me about MCP.",
+    "answer": "# Model Context Protocol (MCP)\n\nBased on the knowledge context available, **MCP (Model Context Protocol)** is a protocol designed to facilitate communication between language models and external systems or tools.\n\n## Core Purpose\nMCP enables language models (LLMs) to interact with and utilize external resources, tools, and data sources in a standardized way. It provides a framework for integrating various capabilities beyond what a model can do on its own.\n\n## Key Features\n\n**Tool Calling Integration**\nMCP works in conjunction with **Tool Calling**, which allows LLMs to:\n- Invoke external functions and services\n- Access specialized tools and APIs\n- Retrieve and process data from various sources\n- Perform actions that require external computation or knowledge\n\n**Knowledge Systems Integration**\nMCP can work alongside systems like **Chroma** (a vector database), enabling:\n- Semantic search over stored information\n- Retrieval of contextual knowledge\n- Integration of embeddings-based search with LLM reasoning\n\n## Practical Application\n\nIn practice, MCP creates a bridge between:\n- **LLMs** - which excel at reasoning and language understanding\n- **External Tools** - like calculators, APIs, databases, weather services, etc.\n- **Data Sources** - including vector databases, knowledge bases, and real-time information\n\nThis architecture allows for more powerful and versatile AI systems that"
+  },
+  {
+    "query": "What is 15.5 * 4?",
+    "answer": "15.5 * 4 = **62.0**"
+  },
+  {
+    "query": "What was the result of the math problem we just solved?",
+    "answer": "Based on our conversation history, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**\n\nThis calculation has been performed and verified multiple times in our previous exchanges."
+  },
+  {
+    "query": "Tell me about MCP.",
+    "answer": "# Model Context Protocol (MCP)\n\nBased on the knowledge context available, **MCP (Model Context Protocol)** is a protocol designed to facilitate communication between language models and external systems or tools.\n\n## Core Purpose\nMCP enables language models (LLMs) to interact with and utilize external resources, tools, and data sources in a standardized way. It provides a framework for integrating various capabilities beyond what a model can do on its own.\n\n## Key Features\n\n**Tool Calling Integration**\nMCP works in conjunction with **Tool Calling**, which allows LLMs to:\n- Invoke external functions and services\n- Access specialized tools and APIs\n- Retrieve and process data from various sources\n- Perform actions that require external computation or knowledge\n\n**Knowledge Systems Integration**\nMCP can work alongside systems like **Chroma** (a vector database), enabling:\n- Semantic search over stored information\n- Retrieval of contextual knowledge\n- Integration of embeddings-based search with LLM reasoning\n\n## Practical Application\n\nIn practice, MCP creates a bridge between:\n- **LLMs** - which excel at reasoning and language understanding\n- **External Tools** - like calculators, APIs, databases, weather services, etc.\n- **Data Sources** - including vector databases, knowledge bases, and real-time information\n\nThis architecture allows for more powerful and versatile AI systems that"
+  },
+  {
+    "query": "What is 15.5 * 4?",
+    "answer": "15.5 * 4 = **62.0**"
+  },
+  {
+    "query": "What was the result of the math problem we just solved?",
+    "answer": "Based on our conversation history, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**\n\nThis calculation has been performed multiple times throughout our conversation, and the answer is consistently **62.0**."
   }
 ]

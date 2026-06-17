@@ -1,7 +1,13 @@
 import os
+import sys
 import json
 import importlib
 from pathlib import Path
+
+base_dir = Path(__file__).parent.parent
+if str(base_dir) not in sys.path:
+    sys.path.insert(0, str(base_dir))
+
 from pydantic import BaseModel, Field
 # pyrefly: ignore [missing-import]
 from anthropic import Anthropic
@@ -36,38 +42,12 @@ class IntegratedResponse(BaseModel):
     tool_result: str | None = Field(description="Result of the tool execution, if any")
     final_answer: str = Field(description="The final answered response to the user")
 
-# ---------------------------------------------------------
-# Dynamic Function Extraction (No-Import-Side-Effects Reuse)
-# ---------------------------------------------------------
-def get_func_from_file(file_path: Path, func_name: str):
-    code_lines = []
-    with open(file_path, "r") as f:
-        lines = f.readlines()
-        
-    in_func = False
-    for line in lines:
-        if line.strip().startswith(f"def {func_name}("):
-            in_func = True
-            code_lines.append(line)
-            continue
-        if in_func:
-            stripped = line.strip()
-            if stripped:
-                spaces = len(line) - len(line.lstrip())
-                if spaces == 0:
-                    in_func = False
-                    continue
-            code_lines.append(line)
-            
-    namespace = {}
-    import requests
-    namespace["requests"] = requests
-    exec("".join(code_lines), namespace)
-    return namespace[func_name]
+# Expose existing implementations by importing them directly
+calculator_module = importlib.import_module("src.15_calculator_tool")
+calculator = calculator_module.calculator
 
-# Expose existing implementations from numbered files
-calculator = get_func_from_file(base_dir / "src" / "15_calculator_tool.py", "calculator")
-get_weather = get_func_from_file(base_dir / "src" / "16_weather_tool.py", "get_weather")
+weather_module = importlib.import_module("src.16_weather_tool")
+get_weather = weather_module.get_weather
 
 # ---------------------------------------------------------
 # Step 1: Query Rewriting
@@ -286,17 +266,27 @@ Chroma retrieved knowledge context:
     # 6. Memory Save
     save_memory(query, final_ans)
     
-    # 7 & 8. Pydantic Validation & Return
-    return IntegratedResponse(
-        original_query=query,
-        rewritten_query=rewritten,
-        memory_context=memory_ctx,
-        retrieved_context=retrieved_ctx,
-        tool_used=tool_used,
-        tool_argument=tool_arg,
-        tool_result=tool_out,
-        final_answer=final_ans
-    )
+    # 7 & 8. Pydantic Validation & Return (Reusing design pattern from 08_structured_output.py)
+    from pydantic import ValidationError
+    try:
+        response_obj = IntegratedResponse(
+            original_query=query,
+            rewritten_query=rewritten,
+            memory_context=memory_ctx,
+            retrieved_context=retrieved_ctx,
+            tool_used=tool_used,
+            tool_argument=tool_arg,
+            tool_result=tool_out,
+            final_answer=final_ans
+        )
+        print("\nValidation Successful")
+        print("-" * 40)
+        return response_obj
+    except ValidationError as e:
+        print("\nSchema Validation Failed")
+        print("-" * 40)
+        print(e)
+        raise e
 
 if __name__ == "__main__":
     print("\n--- Running Integrated Assistant Demo ---\n")

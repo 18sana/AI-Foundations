@@ -52,26 +52,27 @@ tools = [
         }
     }
 ]
-question = input(
-    "Ask about weather: "
-)
-response = client.messages.create(
-    model="claude-haiku-4-5",
-    max_tokens=300,
-    tools=tools,
-    messages=[
-        {
-            "role": "user",
-            "content": question
-        }
-    ]
-)
-tool_use = response.content[0]
+if __name__ == "__main__":
+    question = input(
+        "Ask about weather: "
+    )
+    response = client.messages.create(
+        model="claude-haiku-4-5",
+        max_tokens=300,
+        tools=tools,
+        messages=[
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
+    )
+    tool_use = response.content[0]
 
-result = get_weather(
-    tool_use.input["latitude"],
-    tool_use.input["longitude"]
-)
+    result = get_weather(
+        tool_use.input["latitude"],
+        tool_use.input["longitude"]
+    )
 
-print("\nTemperature:")
-print(result)
+    print("\nTemperature:")
+    print(result)
