@@ -1,22 +1,38 @@
 [
   {
+    "id": 1,
+    "category": "rag",
     "question": "What is RAG?",
     "expected": "Retrieval Augmented Generation"
   },
   {
+    "id": 2,
+    "category": "rag",
     "question": "What is Chroma?",
     "expected": "vector database"
   },
   {
+    "id": 3,
+    "category": "rag",
     "question": "What is FAISS?",
     "expected": "similarity search library"
   },
   {
+    "id": 4,
+    "category": "mcp",
     "question": "What is MCP?",
     "expected": "Model Context Protocol"
   },
   {
+    "id": 5,
+    "category": "tools",
     "question": "What is Tool Calling?",
     "expected": "allows models to use external tools"
+  },
+  {
+    "id": 6,
+    "category": "agents",
+    "question": "What is an Agent?",
+    "expected": "multi-step reasoning system"
   }
 ]
