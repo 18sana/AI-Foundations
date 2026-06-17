@@ -15,3 +15,9 @@ Claude is an AI assistant developed by Anthropic.
 Chroma is a vector database.
 
 FAISS is a vector similarity search library.
+
+MCP is Model Context Protocol.
+
+RAG stands for Retrieval Augmented Generation.
+
+Tool Calling allows LLMs to use external tools.

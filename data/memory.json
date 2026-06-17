@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Tell me about MCP.",
+    "answer": "# Model Context Protocol (MCP)\n\nBased on the context provided, **MCP stands for Model Context Protocol**. It's a protocol that enables language models like me to interact with external tools and services.\n\nHere are some key aspects of MCP:\n\n## Purpose\nMCP facilitates **Tool Calling**, which allows Large Language Models (LLMs) to use external tools and integrations. This extends the capabilities of AI assistants beyond their base knowledge.\n\n## How It Works\nThrough MCP, I can:\n- Access and invoke external tools and services\n- Retrieve information from databases and APIs\n- Perform calculations, check weather, access knowledge bases, and more\n- Integrate seamlessly with various data sources and services\n\n## Practical Examples\nIn my current setup, I have access to tools like:\n- **Calculator** - for mathematical computations\n- **Weather service** - for real-time weather information using coordinates\n- **Chroma** - a vector database for retrieving knowledge and context\n\n## Integration with Other Systems\nMCP works alongside other technologies:\n- **Tool Calling** - the mechanism for invoking external functionality\n- **Vector Databases** (like Chroma) - for efficient storage and retrieval of information\n- **External APIs and services** - for accessing real-world data\n\nThis protocol essentially creates a bridge between language models and the external world, making AI assistants"
+  },
+  {
+    "query": "Tell me about MCP.",
+    "answer": "# Model Context Protocol (MCP)\n\nBased on the knowledge context available, **MCP (Model Context Protocol)** is a protocol designed to facilitate communication between language models and external systems or tools.\n\nHere are the key aspects:\n\n## Core Purpose\nMCP enables language models (LLMs) to interact with and utilize external resources, tools, and data sources in a standardized way. It provides a framework for integrating various capabilities beyond what a model can do on its own.\n\n## Related Capabilities\nMCP works in conjunction with **Tool Calling**, which allows LLMs to:\n- Invoke external functions and services\n- Access specialized tools and APIs\n- Retrieve and process data from various sources\n- Perform actions that require external computation or knowledge\n\n## Integration with Knowledge Systems\nMCP can work alongside systems like **Chroma** (a vector database), enabling:\n- Semantic search over stored information\n- Retrieval of contextual knowledge\n- Integration of embeddings-based search with LLM reasoning\n\n## Practical Application\nIn practice, MCP creates a bridge between:\n- **LLMs** - which excel at reasoning and language understanding\n- **External Tools** - like calculators, APIs, databases, weather services, etc.\n- **Data Sources** - including vector databases, knowledge bases, and real-time information\n\nThis allows for more powerful and versatile AI systems that"
+  },
+  {
+    "query": "What is 15.5 * 4?",
+    "answer": "15.5 * 4 = **62.0**"
+  },
+  {
+    "query": "What is 15.5 * 4?",
+    "answer": "15.5 * 4 = **62.0**"
+  },
+  {
+    "query": "What was the result of the math problem we just solved?",
+    "answer": "Based on our past conversation, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**"
+  },
+  {
+    "query": "What was the result of the math problem we just solved?",
+    "answer": "Based on our past conversation, the result of the math problem we just solved was:\n\n**15.5 * 4 = 62.0**"
+  }
+]
