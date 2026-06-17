@@ -5,7 +5,7 @@
 
 # agent = Agent(
 #     name="Math Tutor",
-#     instructions=""""
+#     instructions="""
 #     You are a helpful math tutor.
 #     """
 # )
@@ -17,8 +17,11 @@
 
 # print(result.final_output)
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import requests
-from agents import function_tool
+from agents import Agent, Runner, function_tool
 
 
 @function_tool
@@ -41,9 +44,17 @@ def get_weather(
     )
 agent = Agent(
     name="Weather Agent",
-    instructions=""""
+    instructions="""
     Use weather tool whenever
     weather information is needed.
     """,
     tools=[get_weather]
 )
+
+result = Runner.run_sync(
+    agent,
+    "What is the weather in London right now?"
+)
+
+print("\nResult:")
+print(result.final_output)
