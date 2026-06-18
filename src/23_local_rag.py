@@ -29,13 +29,21 @@ def local_rag_query(query: str) -> str:
     context = retrieve_context(query)
     
     # 2. Context Injection
-    prompt = f"""Answer the question using only the provided context.
+    prompt = f"""
+    You are a helpful assistant.
+
+    Use the provided context to answer the question.
+
+    If the answer cannot be found in the context, say:
+    "I don't have enough information in the provided context."
 
 Context:
 {context}
 
 Question:
 {query}
+
+Answer:
 """
     
     # 3. Send to Ollama
