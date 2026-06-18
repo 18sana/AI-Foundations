@@ -1,3 +1,82 @@
+# import os
+# import base64
+
+# from anthropic import Anthropic
+# from dotenv import load_dotenv
+
+# # ------------------------------------
+# # Load Environment
+# # ------------------------------------
+
+# load_dotenv()
+
+# client = Anthropic(
+#     api_key=os.getenv(
+#         "ANTHROPIC_API_KEY"
+#     )
+# )
+
+# # ------------------------------------
+# # Image Path
+# # ------------------------------------
+
+# IMAGE_PATH = "images/sample.png"
+
+# # ------------------------------------
+# # Read Image
+# # ------------------------------------
+
+# with open(
+#     IMAGE_PATH,
+#     "rb"
+# ) as image_file:
+
+#     image_data = base64.b64encode(
+#         image_file.read()
+#     ).decode("utf-8")
+
+# # ------------------------------------
+# # Vision Request
+# # ------------------------------------
+
+# response = client.messages.create(
+#     model="claude-haiku-4-5",
+#     max_tokens=500,
+#     messages=[
+#         {
+#             "role": "user",
+#             "content": [
+#                 {
+#                     "type": "image",
+#                     "source": {
+#                         "type": "base64",
+#                         "media_type": "image/png",
+#                         "data": image_data
+#                     }
+#                 },
+#                 {
+#                     "type": "text",
+#                     "text": (
+#                         "Describe this image "
+#                         "in detail."
+#                     )
+#                 }
+#             ]
+#         }
+#     ]
+# )
+
+# # ------------------------------------
+# # Output
+# # ------------------------------------
+
+# print("\n===== IMAGE DESCRIPTION =====\n")
+
+# print(
+#     response.content[0].text
+# )
+
+
 import os
 import base64
 
@@ -17,61 +96,92 @@ client = Anthropic(
 )
 
 # ------------------------------------
-# Image Path
+# Reusable Function
 # ------------------------------------
 
-IMAGE_PATH = "images/sample.png"
+def describe_image(
+    image_path: str,
+    prompt: str = "Describe this image in detail."
+):
 
-# ------------------------------------
-# Read Image
-# ------------------------------------
+    # ------------------------------------
+    # Detect Media Type
+    # ------------------------------------
 
-with open(
-    IMAGE_PATH,
-    "rb"
-) as image_file:
+    if image_path.lower().endswith(".png"):
+        media_type = "image/png"
 
-    image_data = base64.b64encode(
-        image_file.read()
-    ).decode("utf-8")
+    elif image_path.lower().endswith(".jpg"):
+        media_type = "image/jpeg"
 
-# ------------------------------------
-# Vision Request
-# ------------------------------------
+    elif image_path.lower().endswith(".jpeg"):
+        media_type = "image/jpeg"
 
-response = client.messages.create(
-    model="claude-haiku-4-5",
-    max_tokens=500,
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image",
-                    "source": {
-                        "type": "base64",
-                        "media_type": "image/png",
-                        "data": image_data
+    else:
+        raise ValueError(
+            f"Unsupported image type: {image_path}"
+        )
+
+    # ------------------------------------
+    # Read Image
+    # ------------------------------------
+
+    with open(
+        image_path,
+        "rb"
+    ) as image_file:
+
+        image_data = base64.b64encode(
+            image_file.read()
+        ).decode("utf-8")
+
+    print(
+        f"DEBUG: {image_path} -> {media_type}"
+    )
+
+    # ------------------------------------
+    # Vision Request
+    # ------------------------------------
+
+    response = client.messages.create(
+        model="claude-haiku-4-5",
+        max_tokens=500,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": image_data
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": prompt
                     }
-                },
-                {
-                    "type": "text",
-                    "text": (
-                        "Describe this image "
-                        "in detail."
-                    )
-                }
-            ]
-        }
-    ]
-)
+                ]
+            }
+        ]
+    )
 
+    return response.content[0].text
 # ------------------------------------
-# Output
+# Standalone Testing
 # ------------------------------------
 
-print("\n===== IMAGE DESCRIPTION =====\n")
+if __name__ == "__main__":
 
-print(
-    response.content[0].text
-)
+    IMAGE_PATH = "images/sample.png"
+
+    result = describe_image(
+        IMAGE_PATH
+    )
+
+    print(
+        "\n===== IMAGE DESCRIPTION =====\n"
+    )
+
+    print(result)
