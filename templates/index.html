@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Streaming Demo</title>
+</head>
+
+<body>
+
+<h1>Streaming + Structured Output</h1>
+
+<input
+    id="query"
+    value="Explain MCP"
+/>
+
+<button onclick="startStream()">
+    Ask
+</button>
+
+<hr>
+
+<h2>Streaming Response</h2>
+
+<pre id="stream"></pre>
+
+<h2>Status</h2>
+
+<div id="status">
+Idle
+</div>
+
+<h2>Structured Output</h2>
+
+<pre id="structured">
+Waiting...
+</pre>
+
+<script>
+
+let eventSource;
+let streamFinished = false;
+
+function startStream() {
+
+    streamFinished = false;
+
+    document
+        .getElementById(
+            "stream"
+        ).textContent = "";
+
+    document
+        .getElementById(
+            "structured"
+        ).textContent =
+        "Loading...";
+
+    document
+        .getElementById(
+            "status"
+        ).textContent =
+        "Connecting...";
+
+    const query =
+        document
+        .getElementById(
+            "query"
+        ).value;
+
+    if(eventSource){
+
+        eventSource.close();
+    }
+
+    eventSource =
+        new EventSource(
+            `/stream?query=${encodeURIComponent(query)}`
+        );
+
+    // ---------------------
+    // Token Streaming
+    // ---------------------
+
+    eventSource.addEventListener(
+        "token",
+        (event) => {
+
+            document
+                .getElementById(
+                    "stream"
+                ).textContent +=
+                event.data;
+        }
+    );
+
+    // ---------------------
+    // Status Updates
+    // ---------------------
+
+    eventSource.addEventListener(
+        "status",
+        (event) => {
+
+            document
+                .getElementById(
+                    "status"
+                ).textContent =
+                event.data;
+        }
+    );
+
+    // ---------------------
+    // Structured Result
+    // ---------------------
+
+    eventSource.addEventListener(
+        "structured",
+        (event) => {
+
+            const data =
+                JSON.parse(
+                    event.data
+                );
+
+            document
+                .getElementById(
+                    "structured"
+                ).textContent =
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                );
+        }
+    );
+
+    // ---------------------
+    // Complete
+    // ---------------------
+
+    eventSource.addEventListener(
+        "complete",
+        () => {
+
+            streamFinished = true;
+
+            document
+                .getElementById(
+                    "status"
+                ).textContent =
+                "Completed";
+
+            eventSource.close();
+        }
+    );
+
+    // ---------------------
+    // Errors
+    // ---------------------
+
+    eventSource.addEventListener(
+        "error",
+        (event) => {
+
+            streamFinished = true;
+
+            document
+                .getElementById(
+                    "status"
+                ).textContent =
+                "Error";
+
+            document
+                .getElementById(
+                    "structured"
+                ).textContent =
+                event.data;
+
+            eventSource.close();
+        }
+    );
+
+    // ---------------------
+    // Network Failure
+    // ---------------------
+
+    eventSource.onerror =
+        function() {
+
+            if(streamFinished){
+                return;
+            }
+
+            document
+                .getElementById(
+                    "status"
+                ).textContent =
+                "Connection lost";
+        };
+}
+
+</script>
+
+</body>
+</html>
