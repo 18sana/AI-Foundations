@@ -1,0 +1,2 @@
+timestamp,query,model,retrieved_docs,tool_used,latency_seconds,response
+2026-06-22 14:32:50.526438,What is MCP?,claude-haiku-4-5,['MCP enables tool access'],,0.0,MCP stands for Model Context Protocol.
