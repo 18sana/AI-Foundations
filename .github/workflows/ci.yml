@@ -47,4 +47,5 @@ jobs:
 
       - name: Run Evaluations
         run: |
+          python -m src.indexer
           python evals/run_eval.py
