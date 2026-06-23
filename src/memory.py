@@ -2,13 +2,13 @@ import uuid
 import time
 from typing import List, Dict, Any, Optional
 import chromadb
-from src.config import CHROMA_DB_DIR, CHROMA_MEMORY_COLLECTION_NAME
+from src.config import CHROMA_MEMORY_DB_DIR, CHROMA_MEMORY_COLLECTION_NAME
 from src.embedder import DocumentEmbedder
 
 class SemanticMemory:
     def __init__(
         self,
-        persist_dir: str = str(CHROMA_DB_DIR),
+        persist_dir: str = str(CHROMA_MEMORY_DB_DIR),
         collection_name: str = CHROMA_MEMORY_COLLECTION_NAME,
         embedder: Optional[DocumentEmbedder] = None
     ):

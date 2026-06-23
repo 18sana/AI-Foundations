@@ -9,6 +9,7 @@ from src.schema import RAGResponseSchema
 from src.query_rewriter import QueryRewriter
 from src.retriever import DocumentRetriever
 from src.memory import SemanticMemory
+from src.vector_store import ChromaVectorStore
 from src.tools import calculator, web_search, summarise_doc
 
 # Haiku 4.5 Pricing (estimate per 1M tokens)
@@ -16,14 +17,20 @@ INPUT_COST_PER_M = 0.25
 OUTPUT_COST_PER_M = 1.25
 
 class RAGAgent:
-    def __init__(self, model_name: str = "claude-haiku-4-5"):
+    def __init__(self, model_name: str = "claude-haiku-4-5", persist_dir: Optional[str] = None):
         load_dotenv()
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
         self.client = Anthropic(api_key=self.api_key)
         self.model_name = model_name
         self.rewriter = QueryRewriter()
-        self.retriever = DocumentRetriever()
-        self.memory = SemanticMemory()
+        if persist_dir:
+            from pathlib import Path
+            p = Path(persist_dir)
+            self.retriever = DocumentRetriever(vector_store=ChromaVectorStore(persist_dir=str(p / "documents")))
+            self.memory = SemanticMemory(persist_dir=str(p / "memory"))
+        else:
+            self.retriever = DocumentRetriever()
+            self.memory = SemanticMemory()
         self.total_cost = 0.0
 
     def _track_cost(self, input_tokens: int, output_tokens: int):

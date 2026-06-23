@@ -5,7 +5,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 CORPUS_DIR = DATA_DIR / "corpus"
-CHROMA_DB_DIR = BASE_DIR / "chroma_db"
+CHROMA_DB_DIR = BASE_DIR / "chroma_db" / "documents"
+CHROMA_MEMORY_DB_DIR = BASE_DIR / "chroma_db" / "memory"
 
 # Embedding settings
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
@@ -25,3 +26,4 @@ CHUNK_OVERLAP = 50  # Characters
 # Ensure directories exist
 CORPUS_DIR.mkdir(parents=True, exist_ok=True)
 CHROMA_DB_DIR.mkdir(parents=True, exist_ok=True)
+CHROMA_MEMORY_DB_DIR.mkdir(parents=True, exist_ok=True)
