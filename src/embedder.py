@@ -2,18 +2,17 @@ from typing import List
 from sentence_transformers import SentenceTransformer
 from src.config import EMBEDDING_MODEL_NAME
 
-_MODEL_CACHE = {}
-
 class DocumentEmbedder:
     def __init__(self, model_name: str = EMBEDDING_MODEL_NAME):
         self.model_name = model_name
+        self._model = None
 
     @property
     def model(self) -> SentenceTransformer:
-        if self.model_name not in _MODEL_CACHE:
+        if self._model is None:
             print(f"Loading SentenceTransformer model: {self.model_name}...")
-            _MODEL_CACHE[self.model_name] = SentenceTransformer(self.model_name)
-        return _MODEL_CACHE[self.model_name]
+            self._model = SentenceTransformer(self.model_name)
+        return self._model
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """

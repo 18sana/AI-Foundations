@@ -12,8 +12,6 @@ def sigmoid(x: float) -> float:
     except OverflowError:
         return 0.0 if x < 0 else 1.0
 
-_RERANKER_CACHE = {}
-
 class DocumentRetriever:
     def __init__(
         self,
@@ -28,13 +26,14 @@ class DocumentRetriever:
         self.confidence_threshold = confidence_threshold
         self.reranker_model_name = reranker_model_name
         self.rerank_candidates_count = rerank_candidates_count
+        self._reranker = None
 
     @property
     def reranker(self) -> CrossEncoder:
-        if self.reranker_model_name not in _RERANKER_CACHE:
+        if self._reranker is None:
             print(f"Loading CrossEncoder reranker model: {self.reranker_model_name}...")
-            _RERANKER_CACHE[self.reranker_model_name] = CrossEncoder(self.reranker_model_name)
-        return _RERANKER_CACHE[self.reranker_model_name]
+            self._reranker = CrossEncoder(self.reranker_model_name)
+        return self._reranker
 
     def retrieve(self, query: str, rewrite: bool = False, k: int = DEFAULT_TOP_K) -> Dict[str, Any]:
         """
