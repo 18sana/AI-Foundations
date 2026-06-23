@@ -1,38 +1,137 @@
 [
   {
     "id": 1,
-    "category": "rag",
-    "question": "What is RAG?",
-    "expected": "Retrieval Augmented Generation"
+    "tier": 1,
+    "question": "What crossed the heliopause in August 2012?",
+    "expected": "Voyager 1",
+    "session_id": "eval_session_1"
   },
   {
     "id": 2,
-    "category": "rag",
-    "question": "What is Chroma?",
-    "expected": "vector database"
+    "tier": 1,
+    "question": "What three guarantees does the CAP theorem state?",
+    "expected": "Consistency, Availability, and Partition Tolerance",
+    "session_id": "eval_session_2"
   },
   {
     "id": 3,
-    "category": "rag",
-    "question": "What is FAISS?",
-    "expected": "similarity search library"
+    "tier": 1,
+    "question": "Which space agency successfully completed Artemis I in late 2022?",
+    "expected": "NASA",
+    "session_id": "eval_session_3"
   },
   {
     "id": 4,
-    "category": "mcp",
-    "question": "What is MCP?",
-    "expected": "Model Context Protocol"
+    "tier": 1,
+    "question": "What is the theoretical energy density limit of conventional lithium-ion batteries?",
+    "expected": "350 Wh/kg",
+    "session_id": "eval_session_4"
   },
   {
     "id": 5,
-    "category": "tools",
-    "question": "What is Tool Calling?",
-    "expected": "allows models to use external tools"
+    "tier": 1,
+    "question": "Who claimed to achieve quantum supremacy in 2019 using Sycamore processor?",
+    "expected": "Google",
+    "session_id": "eval_session_5"
   },
   {
     "id": 6,
-    "category": "agents",
-    "question": "What is an Agent?",
-    "expected": "multi-step reasoning system"
+    "tier": 2,
+    "question": "Calculate the result of 15 * (34 + 6)",
+    "expected": "600",
+    "session_id": "eval_session_6"
+  },
+  {
+    "id": 7,
+    "tier": 2,
+    "question": "Search online for solid state battery energy density limit.",
+    "expected": "500 Wh/kg",
+    "session_id": "eval_session_7"
+  },
+  {
+    "id": 8,
+    "tier": 2,
+    "question": "What is the current distance of Voyager 1 from Earth according to web search?",
+    "expected": "163",
+    "session_id": "eval_session_8"
+  },
+  {
+    "id": 9,
+    "tier": 2,
+    "question": "Summarize NASA's Artemis dashboard at URL https://nasa.gov/artemis",
+    "expected": "Orion",
+    "session_id": "eval_session_9"
+  },
+  {
+    "id": 10,
+    "tier": 2,
+    "question": "Summarize the Model Context Protocol wiki from URL https://wikipedia.org/wiki/Model_Context_Protocol",
+    "expected": "JSON-RPC",
+    "session_id": "eval_session_10"
+  },
+  {
+    "id": 11,
+    "tier": 3,
+    "question": "Which of those two options do I prefer using?",
+    "expected": "Claude",
+    "session_id": "eval_session_11",
+    "multi_turn_history": [
+      {
+        "user": "I am comparing Claude and GPT. I prefer using Claude over GPT.",
+        "assistant": "Understood. You prefer Claude."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "tier": 3,
+    "question": "Please calculate the distance of that mission multiplied by 2.",
+    "expected": "326",
+    "session_id": "eval_session_12",
+    "multi_turn_history": [
+      {
+        "user": "Voyager 1 is 163 AU away.",
+        "assistant": "Got it. Voyager 1 is at 163 AU."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "tier": 3,
+    "question": "Can you summarize the wiki page for the standard we discussed?",
+    "expected": "JSON-RPC",
+    "session_id": "eval_session_13",
+    "multi_turn_history": [
+      {
+        "user": "We are talking about Model Context Protocol. Check out https://wikipedia.org/wiki/Model_Context_Protocol",
+        "assistant": "I will keep that Model Context Protocol wiki URL in mind."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "tier": 3,
+    "question": "Where is my office located?",
+    "expected": "Seattle",
+    "session_id": "eval_session_14",
+    "multi_turn_history": [
+      {
+        "user": "My name is John. My office is in Seattle.",
+        "assistant": "Nice to meet you John. I have noted that your office is in Seattle."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "tier": 3,
+    "question": "Check online for the energy density limit of the battery technology I mentioned.",
+    "expected": "solid-state",
+    "session_id": "eval_session_15",
+    "multi_turn_history": [
+      {
+        "user": "I am researching solid state battery energy density limits.",
+        "assistant": "Solid-state batteries are an exciting research topic."
+      }
+    ]
   }
 ]

@@ -12,8 +12,11 @@ EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
 
 # ChromaDB settings
 CHROMA_COLLECTION_NAME = "document_corpus"
+CHROMA_MEMORY_COLLECTION_NAME = "conversation_memory"
 CONFIDENCE_THRESHOLD = 0.35
 DEFAULT_TOP_K = 3
+RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+RERANK_CANDIDATES_COUNT = 10
 
 # Chunking settings
 CHUNK_SIZE = 500  # Characters
