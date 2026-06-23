@@ -152,26 +152,8 @@ def main():
 
     client = Anthropic(api_key=api_key)
     
-    # Isolate evaluation DB to prevent concurrent file locking with pytest process
-    import shutil
-    base_dir = Path(__file__).resolve().parent.parent
-    src_db_dir = base_dir / "chroma_db"
-    eval_db_dir = base_dir / "chroma_db_eval"
-    
-    if eval_db_dir.exists():
-        try:
-            shutil.rmtree(eval_db_dir)
-        except Exception:
-            pass
-            
-    try:
-        shutil.copytree(src_db_dir, eval_db_dir)
-    except Exception as e:
-        print(f"Warning: Failed to clone ChromaDB: {e}. Running on base DB.")
-        eval_db_dir = src_db_dir
-
-    agent = RAGAgent(persist_dir=str(eval_db_dir))
-    memory = SemanticMemory(persist_dir=str(eval_db_dir / "memory"))
+    agent = RAGAgent()
+    memory = SemanticMemory()
     
     # Reset memories before evaluation
     memory.reset_memories()
