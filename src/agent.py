@@ -4,6 +4,17 @@ import time
 from typing import List, Dict, Any, Generator, Optional
 from anthropic import Anthropic
 from dotenv import load_dotenv
+try:
+    from langsmith import traceable
+except ImportError:
+    def traceable(name: str = None, run_type: str = None):
+        def decorator(func):
+            import functools
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapper
+        return decorator
 
 from src.schema import RAGResponseSchema
 from src.query_rewriter import QueryRewriter
@@ -11,6 +22,8 @@ from src.retriever import DocumentRetriever
 from src.memory import SemanticMemory
 from src.vector_store import ChromaVectorStore
 from src.tools import calculator, web_search, summarise_doc
+from src.cache import SemanticCache
+from src.guardrails import redact_pii, is_injection_attempt, violates_moderation
 
 # Haiku 4.5 Pricing (estimate per 1M tokens)
 INPUT_COST_PER_M = 0.25
@@ -28,21 +41,46 @@ class RAGAgent:
             p = Path(persist_dir)
             self.retriever = DocumentRetriever(vector_store=ChromaVectorStore(persist_dir=str(p / "documents")))
             self.memory = SemanticMemory(persist_dir=str(p / "memory"))
+            self.cache = SemanticCache(persist_dir=str(p / "cache"))
         else:
             self.retriever = DocumentRetriever()
             self.memory = SemanticMemory()
+            self.cache = SemanticCache()
         self.total_cost = 0.0
 
     def _track_cost(self, input_tokens: int, output_tokens: int):
         cost = (input_tokens / 1_000_000.0 * INPUT_COST_PER_M) + (output_tokens / 1_000_000.0 * OUTPUT_COST_PER_M)
         self.total_cost += cost
 
+    @traceable(name="RAG Agent Stream", run_type="chain")
     def run_agent_stream(self, query: str, session_id: str = "default") -> Generator[Dict[str, Any], None, None]:
         """
         Runs the RAG Agent loop, yielding status updates, token streams, and final structured result.
         """
         self.total_cost = 0.0
         
+        # 0. Run Input Guardrails
+        if is_injection_attempt(query) or violates_moderation(query):
+            yield {"event": "status", "data": "Safety check failed! Prompt rejected."}
+            refusal_response = {
+                "answer": "I cannot answer this query as it violates safety or prompt guidelines.",
+                "citations": [],
+                "confidence": 0.0,
+                "follow_up_questions": ["What documents are available?", "Can you explain the CAP theorem?"]
+            }
+            yield {"event": "result", "data": refusal_response}
+            return
+
+        # 0. Check Semantic Cache
+        cached_res = self.cache.lookup(query)
+        if cached_res:
+            yield {"event": "status", "data": "Semantic Cache Hit! Retrieving cached answer..."}
+            for token in cached_res.get("answer", "").split():
+                yield {"event": "token", "data": token + " "}
+                time.sleep(0.01)
+            yield {"event": "result", "data": cached_res}
+            return
+
         # 1. Query Rewriting
         yield {"event": "status", "data": "Rewriting query..."}
         try:
@@ -158,15 +196,20 @@ class RAGAgent:
         yield {"event": "status", "data": "Structuring response..."}
         final_response = self._structure_and_validate(query, verified_answer, retrieval_res["confidence"])
         
+        # Run Output Guardrails (Redact PII)
+        final_response.answer = redact_pii(final_response.answer)
+        
         # 6. Stream tokens and output final result
         # Yield the tokens from the structured answer for user display
         for token in final_response.answer.split():
             yield {"event": "token", "data": token + " "}
             time.sleep(0.01)
             
-        yield {"event": "result", "data": final_response.model_dump()}
+        final_data = final_response.model_dump()
+        yield {"event": "result", "data": final_data}
         
-        # 7. Persist to Semantic Memory
+        # 7. Persist to Semantic Cache and Semantic Memory
+        self.cache.add(query, final_data)
         self.memory.save_exchange(session_id, query, final_response.answer)
         print(f"Query Cost: ${self.total_cost:.5f}")
 
@@ -211,6 +254,7 @@ class RAGAgent:
             return True
         return False
 
+    @traceable(name="Critic Layer", run_type="llm")
     def _run_critic(self, query: str, answer: str, context: str, tools_out: List[str]) -> str:
         critic_prompt = (
             "You are a strict Critic layer for a RAG QA system.\n"
@@ -236,6 +280,7 @@ class RAGAgent:
         self._track_cost(response.usage.input_tokens, response.usage.output_tokens)
         return response.content[0].text.strip()
 
+    @traceable(name="Structure & Validate", run_type="llm")
     def _structure_and_validate(self, query: str, verified_answer: str, retrieval_confidence: float) -> RAGResponseSchema:
         structure_prompt = (
             "Extract and format the verified answer into the following structured JSON schema:\n"

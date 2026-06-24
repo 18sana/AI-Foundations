@@ -12,6 +12,18 @@ def sigmoid(x: float) -> float:
     except OverflowError:
         return 0.0 if x < 0 else 1.0
 
+try:
+    from langsmith import traceable
+except ImportError:
+    def traceable(name: str = None, run_type: str = None):
+        def decorator(func):
+            import functools
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapper
+        return decorator
+
 class DocumentRetriever:
     def __init__(
         self,
@@ -35,6 +47,7 @@ class DocumentRetriever:
             self._reranker = CrossEncoder(self.reranker_model_name)
         return self._reranker
 
+    @traceable(name="Document Retriever", run_type="retriever")
     def retrieve(self, query: str, rewrite: bool = False, k: int = DEFAULT_TOP_K) -> Dict[str, Any]:
         """
         Embeds the query, retrieves candidates from ChromaDB, reranks them using CrossEncoder,

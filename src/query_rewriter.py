@@ -1,6 +1,17 @@
 import os
 from anthropic import Anthropic
 from dotenv import load_dotenv
+try:
+    from langsmith import traceable
+except ImportError:
+    def traceable(name: str = None, run_type: str = None):
+        def decorator(func):
+            import functools
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+            return wrapper
+        return decorator
 
 class QueryRewriter:
     def __init__(self, model_name: str = "claude-haiku-4-5"):
@@ -9,6 +20,7 @@ class QueryRewriter:
         self.client = Anthropic(api_key=self.api_key)
         self.model_name = model_name
 
+    @traceable(name="Query Rewriter", run_type="llm")
     def rewrite(self, query: str) -> str:
         """
         Rewrites a user's question to make it optimized for a vector database.
