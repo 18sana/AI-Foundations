@@ -36,16 +36,14 @@ class ChromaVectorStore:
 
     def reset_collection(self):
         """
-        Deletes the current collection and recreates it empty.
+        Deletes all chunks from the collection without recreating it.
         """
         try:
-            self.client.delete_collection(self.collection.name)
-        except Exception:
-            pass
-        self.collection = self.client.get_or_create_collection(
-            name=self.collection.name,
-            metadata={"hnsw:space": "cosine"}
-        )
+            existing = self.collection.get()
+            if existing and existing.get("ids"):
+                self.collection.delete(ids=existing["ids"])
+        except Exception as e:
+            print(f"Error resetting collection: {e}")
 
     def query_similar(self, query_embedding: List[float], k: int = 3) -> Dict[str, Any]:
         """

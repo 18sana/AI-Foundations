@@ -90,13 +90,11 @@ class SemanticMemory:
 
     def reset_memories(self):
         """
-        Clears the memory collection.
+        Clears all memories from the collection without recreating it.
         """
         try:
-            self.client.delete_collection(self.collection.name)
-        except Exception:
-            pass
-        self.collection = self.client.get_or_create_collection(
-            name=self.collection.name,
-            metadata={"hnsw:space": "cosine"}
-        )
+            existing = self.collection.get()
+            if existing and existing.get("ids"):
+                self.collection.delete(ids=existing["ids"])
+        except Exception as e:
+            print(f"Error resetting memories: {e}")
