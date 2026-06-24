@@ -97,7 +97,14 @@ class RAGAgent:
             
         # 3. Document Retrieval
         yield {"event": "status", "data": "Searching documents..."}
-        retrieval_res = self.retriever.retrieve(rewritten_query, rewrite=False)
+        try:
+            # Consume the corpus search tool exposed by the MCP server
+            from src.mcp_server import search_corpus
+            res_str = search_corpus(rewritten_query, rewrite=False, k=3)
+            retrieval_res = json.loads(res_str)
+        except Exception:
+            # Fallback to direct retriever
+            retrieval_res = self.retriever.retrieve(rewritten_query, rewrite=False)
         
         # Check if retrieve returned "I don't know" rejection
         if not retrieval_res["answerable"]:
